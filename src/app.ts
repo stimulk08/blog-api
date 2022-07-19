@@ -1,7 +1,4 @@
-/* eslint-disable import/no-unresolved */
 import express from 'express';
-
-// eslint-disable-next-line import/extensions
 import IController from './Types/IController';
 
 export default class App {
