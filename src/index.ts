@@ -2,7 +2,7 @@
 import * as bodyParser from 'body-parser';
 import App from './app';
 import loggerMiddleware from './middlewares/logger';
-import PORT from './config';
+import { PORT } from './config';
 
 const app = new App({
   port: Number(PORT),
