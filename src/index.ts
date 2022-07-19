@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import * as bodyParser from 'body-parser';
 import App from './app';
 import loggerMiddleware from './middlewares/logger';
