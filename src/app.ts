@@ -9,8 +9,8 @@ export default class App {
   constructor(appData: {port: number, middlewares: any[], controllers: IController[]}) {
     this.app = express();
     this.port = appData.port;
-    this.initMiddlewares(appData.middlewares);
     this.initRoutes(appData.controllers);
+    this.initMiddlewares(appData.middlewares);
   }
 
   private initMiddlewares(middlewares: any[]) {

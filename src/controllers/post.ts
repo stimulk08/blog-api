@@ -1,4 +1,7 @@
-import { Request, Response, Router } from 'express';
+import createHttpError from 'http-errors';
+import {
+  NextFunction, Request, Response, Router,
+} from 'express';
 import { Post } from '../models/post';
 import IContoller from '../Types/IController';
 
@@ -24,10 +27,11 @@ export default class PostController implements IContoller {
     res.status(200).json({ posts });
   }
 
-  private static async getPost(req: Request, res: Response) {
+  private static async getPost(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const post = await Post.findByPk(id);
-    res.status(200).json(post);
+    if (!post) return next(createHttpError(404, 'Post not Found'));
+    return res.status(200).json(post);
   }
 
   private static async createPost(req: Request, res: Response) {

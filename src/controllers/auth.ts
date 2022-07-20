@@ -1,5 +1,8 @@
 import { hash, compare } from 'bcrypt';
-import { Request, Response, Router } from 'express';
+import {
+  NextFunction, Request, Response, Router,
+} from 'express';
+import createHttpError from 'http-errors';
 import { generateAccessToken } from '../services/jwt';
 import User from '../models/user';
 import IContoller from '../Types/IController';
@@ -23,10 +26,10 @@ export default class AuthController implements IContoller {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.ttl}`;
   }
 
-  private static async registration(req: Request, res: Response) {
+  private static async registration(req: Request, res: Response, next: NextFunction) {
     const userData = req.body as User;
     const userExists = await User.findOne({ where: { username: userData.username } });
-    if (userExists) { return res.status(409).send({ message: 'User already exists' }); }
+    if (userExists) { return next(createHttpError(409, 'User already exists')); }
 
     const hashedPassword = await hash(userData.password, 7);
     const user = await User.create({ ...userData, password: hashedPassword });
@@ -37,7 +40,7 @@ export default class AuthController implements IContoller {
     return res.status(201).send(user);
   }
 
-  private static async login(req: Request, res: Response) {
+  private static async login(req: Request, res: Response, next: NextFunction) {
     const userData = req.body as User;
     const user = await User.findOne({ where: { username: userData.username } });
     if (user) {
@@ -49,6 +52,6 @@ export default class AuthController implements IContoller {
         return res.send(user);
       }
     }
-    return res.status(403).send({ message: 'Invalid credentials' });
+    return next(createHttpError(403, 'Invalid credentials'));
   }
 }
