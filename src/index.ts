@@ -5,10 +5,12 @@ import { PORT } from './config';
 import UserController from './controllers/user';
 import database from './database';
 import PostController from './controllers/post';
+import AuthController from './controllers/auth';
 
 const app = new App({
   port: Number(PORT),
   controllers: [
+    new AuthController(),
     new PostController(),
     new UserController(),
   ],
