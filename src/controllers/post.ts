@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
-import {
-  NextFunction, Request, Response, Router,
-} from 'express';
+import { Request, Response, Router } from 'express';
+import expressAsyncHandler from 'express-async-handler';
 import { Post } from '../models/post';
 import IContoller from '../Types/IController';
 
@@ -15,11 +14,11 @@ export default class PostController implements IContoller {
   }
 
   public initRoutes() {
-    this.router.get(this.path, PostController.getPosts);
-    this.router.get(`${this.path}/:id`, PostController.getPost);
-    this.router.post(this.path, PostController.createPost);
-    this.router.put(`${this.path}/:id`, PostController.updatePost);
-    this.router.delete(`${this.path}/:id`, PostController.deletePost);
+    this.router.get(this.path, expressAsyncHandler(PostController.getPosts));
+    this.router.get(`${this.path}/:id`, expressAsyncHandler(PostController.getPost));
+    this.router.post(this.path, expressAsyncHandler(PostController.createPost));
+    this.router.put(`${this.path}/:id`, expressAsyncHandler(PostController.updatePost));
+    this.router.delete(`${this.path}/:id`, expressAsyncHandler(PostController.deletePost));
   }
 
   private static async getPosts(req: Request, res: Response) {
@@ -27,27 +26,30 @@ export default class PostController implements IContoller {
     res.status(200).json({ posts });
   }
 
-  private static async getPost(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.params;
-    const post = await Post.findByPk(id);
-    if (!post) return next(createHttpError(404, 'Post not Found'));
-    return res.status(200).json(post);
+  private static async getPost(req: Request, res: Response) {
+    const post = await Post.findByPk(req.params.id);
+    if (!post) throw createHttpError(404, 'Post not Found');
+
+    res.status(200).json(post);
   }
 
   private static async createPost(req: Request, res: Response) {
-    let post = req.body;
-    const result = await Post.create(post);
-    post = result.getDataValue('id') as Post;
+    const post = await Post.create(req.body);
     res.status(201).json(post);
   }
 
   private static async updatePost(req: Request, res: Response) {
-    const post = req.body as Post;
-    await Post.update(post, { where: { id: req.params.id } });
+    const post = await Post.findByPk(req.params.id);
+    if (!post) throw createHttpError(404, 'Post not Found');
+
+    await Post.update(req.body, { where: { id: req.params.id } });
     res.sendStatus(204);
   }
 
   private static async deletePost(req: Request, res: Response) {
+    const post = await Post.findByPk(req.params.id);
+    if (!post) throw createHttpError(404, 'Post not Found');
+
     await Post.destroy({ where: { id: req.params.id } });
     res.sendStatus(204);
   }

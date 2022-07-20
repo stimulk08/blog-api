@@ -5,6 +5,8 @@ function errorMiddleware(error: HttpError, req: Request, res: Response, next: Ne
   const status = error.status || 500;
   const message = error.message || 'Something went wrong';
 
+  console.error(message, error.message ?? error.stack);
+
   res
     .status(status)
     .send({

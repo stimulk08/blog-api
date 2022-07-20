@@ -21,8 +21,8 @@ const app = new App({
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     loggerMiddleware,
-    errorMiddleware,
   ],
+  errorHandler: errorMiddleware,
 });
 
 app.listen().then(() => {

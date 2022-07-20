@@ -1,8 +1,7 @@
 import { hash, compare } from 'bcrypt';
-import {
-  NextFunction, Request, Response, Router,
-} from 'express';
+import { Request, Response, Router } from 'express';
 import createHttpError from 'http-errors';
+import expressAsyncHandler from 'express-async-handler';
 import { generateAccessToken } from '../services/jwt';
 import User from '../models/user';
 import IContoller from '../Types/IController';
@@ -18,18 +17,18 @@ export default class AuthController implements IContoller {
   }
 
   public initRoutes() {
-    this.router.post(`${this.path}/register`, AuthController.registration);
-    this.router.post(`${this.path}/login`, AuthController.login);
+    this.router.post(`${this.path}/register`, expressAsyncHandler(AuthController.registration));
+    this.router.post(`${this.path}/login`, expressAsyncHandler(AuthController.login));
   }
 
   private static createCookie(tokenData: TokenData) {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.ttl}`;
   }
 
-  private static async registration(req: Request, res: Response, next: NextFunction) {
+  private static async registration(req: Request, res: Response) {
     const userData = req.body as User;
     const userExists = await User.findOne({ where: { username: userData.username } });
-    if (userExists) { return next(createHttpError(409, 'User already exists')); }
+    if (userExists) throw createHttpError(409, 'User already exists');
 
     const hashedPassword = await hash(userData.password, 7);
     const user = await User.create({ ...userData, password: hashedPassword });
@@ -37,21 +36,20 @@ export default class AuthController implements IContoller {
 
     const tokenData = generateAccessToken({ username: user.username });
     res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
-    return res.status(201).send(user);
+    res.status(201).send(user);
   }
 
-  private static async login(req: Request, res: Response, next: NextFunction) {
+  private static async login(req: Request, res: Response) {
     const userData = req.body as User;
     const user = await User.findOne({ where: { username: userData.username } });
-    if (user) {
-      const isPasswordMatching = await compare(userData.password, user.password);
-      if (isPasswordMatching) {
-        user.password = '';
-        const tokenData = generateAccessToken({ username: user.username });
-        res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
-        return res.send(user);
-      }
-    }
-    return next(createHttpError(403, 'Invalid credentials'));
+    if (!user) throw createHttpError(404, 'User not found');
+
+    const isPasswordMatching = await compare(userData.password, user.password);
+    if (!isPasswordMatching) throw createHttpError(403, 'Wrong password');
+
+    user.password = '';
+    const tokenData = generateAccessToken({ username: user.username });
+    res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
+    res.send(user);
   }
 }

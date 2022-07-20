@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
-import {
-  NextFunction, Request, Response, Router,
-} from 'express';
+import { Request, Response, Router } from 'express';
+import expressAsyncHandler from 'express-async-handler';
 import User from '../models/user';
 import IContoller from '../Types/IController';
 
@@ -15,9 +14,9 @@ export default class UserController implements IContoller {
   }
 
   public initRoutes() {
-    this.router.get(this.path, UserController.getUsers);
-    this.router.get(`${this.path}/:id`, UserController.getUser);
-    this.router.post(this.path, UserController.createUser);
+    this.router.get(this.path, expressAsyncHandler(UserController.getUsers));
+    this.router.get(`${this.path}/:id`, expressAsyncHandler(UserController.getUser));
+    this.router.post(this.path, expressAsyncHandler(UserController.createUser));
   }
 
   private static async getUsers(req: Request, res: Response) {
@@ -25,10 +24,10 @@ export default class UserController implements IContoller {
     res.status(200).json({ users: result });
   }
 
-  private static async getUser(req: Request, res: Response, next: NextFunction) {
+  private static async getUser(req: Request, res: Response) {
     const user = await User.findByPk(req.params.id);
-    if (!user) return next(createHttpError(404, 'User not found'));
-    return res.status(200).json({ user });
+    if (!user) throw createHttpError(404, 'User not found');
+    res.status(200).json({ user });
   }
 
   private static async createUser(req: Request, res: Response) {
