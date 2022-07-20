@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 import createHttpError from 'http-errors';
 import { Request, Response, Router } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { Post } from '../models/post';
 import IContoller from '../Types/IController';
+import authTokenMiddleware from '../middlewares/authToken';
 
 export default class PostController implements IContoller {
   public readonly path = '/api/posts';
@@ -16,7 +18,7 @@ export default class PostController implements IContoller {
   public initRoutes() {
     this.router.get(this.path, expressAsyncHandler(PostController.getPosts));
     this.router.get(`${this.path}/:id`, expressAsyncHandler(PostController.getPost));
-    this.router.post(this.path, expressAsyncHandler(PostController.createPost));
+    this.router.post(this.path, authTokenMiddleware, expressAsyncHandler(PostController.createPost));
     this.router.put(`${this.path}/:id`, expressAsyncHandler(PostController.updatePost));
     this.router.delete(`${this.path}/:id`, expressAsyncHandler(PostController.deletePost));
   }
