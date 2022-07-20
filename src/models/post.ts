@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import database from '../database';
-import { UserModel } from './user';
 
 class Post extends Model {
   public id?: number;
@@ -10,8 +9,6 @@ class Post extends Model {
   public title!: string;
 
   public text?: string;
-
-  public country?: string;
 }
 
 const PostModel = Post.init({
@@ -32,7 +29,7 @@ const PostModel = Post.init({
   timestamps: false,
 });
 
-PostModel.belongsTo(UserModel);
-Post.sync();
+// PostModel.belongsTo(UserModel);
+// Post.sync();
 
 export { PostModel, Post };
