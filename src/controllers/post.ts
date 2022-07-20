@@ -16,6 +16,7 @@ export default class PostController implements IContoller {
     this.router.get(`${this.path}/:id`, PostController.getPost);
     this.router.post(this.path, PostController.createPost);
     this.router.put(`${this.path}/:id`, PostController.updatePost);
+    this.router.delete(`${this.path}/:id`, PostController.deletePost);
   }
 
   private static async getPosts(req: Request, res: Response) {
@@ -39,6 +40,11 @@ export default class PostController implements IContoller {
   private static async updatePost(req: Request, res: Response) {
     const post = req.body as Post;
     await Post.update(post, { where: { id: req.params.id } });
+    res.sendStatus(204);
+  }
+
+  private static async deletePost(req: Request, res: Response) {
+    await Post.destroy({ where: { id: req.params.id } });
     res.sendStatus(204);
   }
 }
