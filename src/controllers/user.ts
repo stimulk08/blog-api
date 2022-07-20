@@ -23,15 +23,13 @@ export default class UserController implements IContoller {
   }
 
   private static async getUser(req: Request, res: Response) {
-    const { id } = req.params;
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(req.params.id);
     res.status(200).json({ user });
   }
 
   private static async createUser(req: Request, res: Response) {
-    let newUser = req.body;
-    const result = await User.create(newUser);
-    newUser = result.getDataValue('id') as User;
-    res.status(201).json({ user: newUser });
+    const userData = req.body;
+    const user = await User.create(userData);
+    res.status(201).json(user);
   }
 }

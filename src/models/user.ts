@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import database from '../database';
 
 export default class User extends Model {
-  public id!: number;
+  public id?: number;
 
   public username!: string;
 
@@ -14,7 +14,7 @@ const UserModel = User.init({
     autoIncrement: true,
     primaryKey: true,
   },
-  name: { type: DataTypes.STRING(255) },
+  username: { type: DataTypes.STRING(255) },
   password: { type: DataTypes.STRING(100) },
 }, {
   sequelize: database,

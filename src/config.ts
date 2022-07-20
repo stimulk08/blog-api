@@ -4,6 +4,8 @@ config({
   path: `${__dirname}/../.env`,
 });
 
+export const TOKEN_SECRET = String(process.env.TOKEN_SECRET);
+export const JWT_TTL = String(process.env.JWT_TTL);
 export const PORT = Number(process.env.PORT);
 export const DB_LOG = Boolean(process.env.DB_LOG);
 export const DB_HOST = String(process.env.DB_HOST);
