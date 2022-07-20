@@ -7,6 +7,7 @@ import UserController from './controllers/user';
 import database from './database';
 import PostController from './controllers/post';
 import AuthController from './controllers/auth';
+import errorMiddleware from './middlewares/error';
 
 const app = new App({
   port: Number(PORT),
@@ -21,6 +22,7 @@ const app = new App({
     bodyParser.urlencoded({ extended: false }),
     loggerMiddleware,
   ],
+  errorHandler: errorMiddleware,
 });
 
 app.listen().then(() => {

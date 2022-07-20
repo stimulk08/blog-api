@@ -6,11 +6,13 @@ export default class App {
 
   public port: number;
 
-  constructor(appData: {port: number, middlewares: any[], controllers: IController[]}) {
+  constructor(appData:
+    {port: number, middlewares: any[], controllers: IController[], errorHandler: any}) {
     this.app = express();
     this.port = appData.port;
     this.initMiddlewares(appData.middlewares);
     this.initRoutes(appData.controllers);
+    this.app.use(appData.errorHandler);
   }
 
   private initMiddlewares(middlewares: any[]) {

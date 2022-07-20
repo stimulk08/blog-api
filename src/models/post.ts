@@ -29,7 +29,4 @@ const PostModel = Post.init({
   timestamps: false,
 });
 
-// PostModel.belongsTo(UserModel);
-// Post.sync();
-
 export { PostModel, Post };
