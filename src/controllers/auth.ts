@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { Request, Response, Router } from 'express';
 import { generateAccessToken } from '../services/jwt';
 import User from '../models/user';
@@ -16,6 +16,7 @@ export default class AuthController implements IContoller {
 
   public initRoutes() {
     this.router.post(`${this.path}/register`, AuthController.registration);
+    this.router.post(`${this.path}/login`, AuthController.login);
   }
 
   private static createCookie(tokenData: TokenData) {
@@ -31,8 +32,23 @@ export default class AuthController implements IContoller {
     const user = await User.create({ ...userData, password: hashedPassword });
     user.password = '';
 
-    const tokenData = generateAccessToken(user.username);
+    const tokenData = generateAccessToken({ username: user.username });
     res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
     return res.status(201).send(user);
+  }
+
+  private static async login(req: Request, res: Response) {
+    const userData = req.body as User;
+    const user = await User.findOne({ where: { username: userData.username } });
+    if (user) {
+      const isPasswordMatching = await compare(userData.password, user.password);
+      if (isPasswordMatching) {
+        user.password = '';
+        const tokenData = generateAccessToken({ username: user.username });
+        res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
+        return res.send(user);
+      }
+    }
+    return res.status(403).send({ message: 'Invalid credentials' });
   }
 }

@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
+import DataStoredInToken from '../Types/dataStoredInToken';
 import { TOKEN_SECRET, JWT_TTL } from '../config';
 
-function generateAccessToken(username: string) {
+function generateAccessToken(storedData: DataStoredInToken) {
   return {
     ttl: JWT_TTL,
-    token: jwt.sign({ username }, TOKEN_SECRET, { expiresIn: JWT_TTL }),
+    token: jwt.sign(storedData, TOKEN_SECRET, { expiresIn: JWT_TTL }),
   };
 }
 

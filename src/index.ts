@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import App from './app';
 import loggerMiddleware from './middlewares/logger';
 import { PORT } from './config';
@@ -15,6 +16,7 @@ const app = new App({
     new UserController(),
   ],
   middlewares: [
+    cookieParser(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     loggerMiddleware,

@@ -1,19 +1,21 @@
 import { Response, NextFunction } from 'express';
-import { RequestWithUser } from '../Types/RequestWithUsername';
+import { RequestWithUsername } from '../Types/RequestWithUsername';
 import { checkAccessToken } from '../services/jwt';
+import DataStoredInToken from '../Types/dataStoredInToken';
 
-function authToken(req: RequestWithUser, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
-  try {
-    const username = checkAccessToken(token);
-    req.username = username as string;
-    return next();
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(401);
+function authTokenMiddleware(req: RequestWithUsername, res: Response, next: NextFunction) {
+  if (req.cookies && req.cookies.Authorization) {
+    try {
+      const { username } = checkAccessToken(req.cookies.Authorization) as DataStoredInToken;
+      req.username = username;
+      checkAccessToken(req.cookies.Authorization) as DataStoredInToken;
+      next();
+    } catch (error) {
+      console.log(error);
+      return res.status(401).send({ message: 'Wrong access token' });
+    }
   }
+  return res.status(401).send({ message: 'Wrong access token' });
 }
 
-export default authToken;
+export default authTokenMiddleware;
