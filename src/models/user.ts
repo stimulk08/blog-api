@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import database from '../database';
-import { PostModel } from './post';
 
 export default class User extends Model {
   public id!: number;
@@ -23,8 +22,5 @@ const UserModel = User.init({
   tableName: 'users',
   timestamps: false,
 });
-
-UserModel.hasMany(PostModel, { foreignKey: 'author_id' });
-User.sync();
 
 export { UserModel };

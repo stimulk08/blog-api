@@ -2,25 +2,34 @@ import { Model, DataTypes } from 'sequelize';
 import database from '../database';
 
 class Post extends Model {
+  public id?: number;
+
+  public author_id!: number;
+
+  public title!: string;
+
+  public text?: string;
 }
 
-const PostModel = database.define('Post', {
+const PostModel = Post.init({
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT.UNSIGNED,
     autoIncrement: true,
     primaryKey: true,
   },
-  author_id: { type: DataTypes.INTEGER },
+  author_id: { type: DataTypes.BIGINT.UNSIGNED },
   title: { type: DataTypes.STRING(255) },
   text: { type: DataTypes.STRING(255) },
   imageUrl: { type: DataTypes.STRING(255), allowNull: true },
   videoUrl: { type: DataTypes.STRING(255), allowNull: true },
 }, {
+  sequelize: database,
   modelName: 'Post',
   tableName: 'posts',
   timestamps: false,
 });
 
-// PostModel.belongsTo(User, { foreignKey: 'author_id', targetKey: 'author_id' });
+// PostModel.belongsTo(UserModel);
+// Post.sync();
 
 export { PostModel, Post };

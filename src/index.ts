@@ -4,10 +4,12 @@ import loggerMiddleware from './middlewares/logger';
 import { PORT } from './config';
 import UserController from './controllers/user';
 import database from './database';
+import PostController from './controllers/post';
 
 const app = new App({
   port: Number(PORT),
   controllers: [
+    new PostController(),
     new UserController(),
   ],
   middlewares: [
