@@ -3,13 +3,11 @@ import database from '../database';
 import { PostModel } from './post';
 
 export default class User extends Model {
-  public id?: number;
+  public id!: number;
 
   public username!: string;
 
   public password!: string;
-
-  public country?: string;
 }
 const UserModel = User.init({
   id: {
@@ -19,7 +17,6 @@ const UserModel = User.init({
   },
   name: { type: DataTypes.STRING(255) },
   password: { type: DataTypes.STRING(100) },
-  country: { type: DataTypes.STRING(50), allowNull: true },
 }, {
   sequelize: database,
   modelName: 'User',

@@ -18,10 +18,10 @@ export default class App {
   }
 
   private initRoutes(controllers: IController[]) {
-    controllers.forEach((controller) => this.app.use(controller.path, controller.router));
+    controllers.forEach((controller) => this.app.use('/', controller.router));
   }
 
-  public listen() {
+  public async listen() {
     this.app.listen(this.port, () => console.log(`listening on port ${this.port}`));
   }
 }
