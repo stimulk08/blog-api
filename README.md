@@ -1,16 +1,11 @@
 # blog-api
 ## Цель проекта
  Реализовать REST API для сайта, где пользователь может создавать посты и управлять ими
-## Модули
- Проект состоит из следующих частей
- * Jwt
- * Api
- * PostgreSQL
- * Swagger
 ## Стек технологий
  * ЯП: Typescript
  * API: Express
- * БД: Sequelize
+ * БД: PostgreSQL
+ * ORM: Sequelize
 
 ## Tasks
 |  | Name | I knew how to do it before | Implemented | Working | I enjoyed it |
