@@ -24,3 +24,4 @@
 |7|Heroku|✅|❌(I didn 't have time)|❌|💔|
 |8|Docker|✅|❌(I didn 't have time)|❌|💔|
 |9|Swagger|✅|✅|✅|❤️|
+|10|REST API|✅|✅|✅|❤️|
