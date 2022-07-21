@@ -16,7 +16,6 @@ export default class UserController implements IContoller {
   public initRoutes() {
     this.router.get(this.path, expressAsyncHandler(UserController.getUsers));
     this.router.get(`${this.path}/:id`, expressAsyncHandler(UserController.getUser));
-    this.router.post(this.path, expressAsyncHandler(UserController.createUser));
   }
 
   private static async getUsers(req: Request, res: Response) {
@@ -28,11 +27,5 @@ export default class UserController implements IContoller {
     const user = await User.findByPk(req.params.id);
     if (!user) throw createHttpError(404, 'User not found');
     res.status(200).json({ user });
-  }
-
-  private static async createUser(req: Request, res: Response) {
-    const userData = req.body;
-    const user = await User.create(userData);
-    res.status(201).json(user);
   }
 }

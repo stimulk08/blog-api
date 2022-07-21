@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+
 import App from './app';
 import loggerMiddleware from './middlewares/logger';
 import { PORT } from './config';
@@ -8,6 +9,15 @@ import database from './database';
 import PostController from './controllers/post';
 import AuthController from './controllers/auth';
 import errorMiddleware from './middlewares/error';
+import * as specs from './swaggerOptions.json';
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ */
 
 const app = new App({
   port: Number(PORT),
@@ -23,6 +33,7 @@ const app = new App({
     loggerMiddleware,
   ],
   errorHandler: errorMiddleware,
+  specs,
 });
 
 app.listen().then(() => {
