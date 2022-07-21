@@ -1,3 +1,4 @@
+import swaggerUi from 'swagger-ui-express';
 import express from 'express';
 import IController from './Types/IController';
 
@@ -7,12 +8,13 @@ export default class App {
   public port: number;
 
   constructor(appData:
-    {port: number, middlewares: any[], controllers: IController[], errorHandler: any}) {
+    {port: number, middlewares: any[], controllers: IController[], errorHandler: any, specs: any}) {
     this.app = express();
     this.port = appData.port;
     this.initMiddlewares(appData.middlewares);
     this.initRoutes(appData.controllers);
     this.app.use(appData.errorHandler);
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(appData.specs));
   }
 
   private initMiddlewares(middlewares: any[]) {

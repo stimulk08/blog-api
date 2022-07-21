@@ -41,6 +41,7 @@ export default class AuthController implements IContoller {
 
   private static async login(req: Request, res: Response) {
     const userData = req.body as User;
+    console.log(userData);
     const user = await User.findOne({ where: { username: userData.username } });
     if (!user) throw createHttpError(404, 'User not found');
 
@@ -50,6 +51,6 @@ export default class AuthController implements IContoller {
     user.password = '';
     const tokenData = generateAccessToken({ username: user.username });
     res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
-    res.send(user);
+    res.status(200).send(user);
   }
 }

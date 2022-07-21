@@ -16,7 +16,7 @@ export default class PostController implements IContoller {
   }
 
   public initRoutes() {
-    this.router.get(this.path, expressAsyncHandler(PostController.getPosts));
+    this.router.get(this.path, authTokenMiddleware, expressAsyncHandler(PostController.getPosts));
     this.router.get(`${this.path}/:id`, expressAsyncHandler(PostController.getPost));
     this.router.post(this.path, authTokenMiddleware, expressAsyncHandler(PostController.createPost));
     this.router.put(`${this.path}/:id`, expressAsyncHandler(PostController.updatePost));
@@ -30,7 +30,7 @@ export default class PostController implements IContoller {
 
   private static async getPost(req: Request, res: Response) {
     const post = await Post.findByPk(req.params.id);
-    if (!post) throw createHttpError(404, 'Post not Found');
+    if (!post) throw createHttpError(404, 'Post not found');
 
     res.status(200).json(post);
   }
