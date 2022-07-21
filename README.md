@@ -23,4 +23,4 @@
 |6|Web client|✅|❌(I didn 't have time)|❌|💔|
 |7|Heroku|✅|❌(I didn 't have time)|❌|💔|
 |8|Docker|✅|❌(I didn 't have time)|❌|💔|
-|9|Docker|✅|✅|✅|❤️|
+|9|Swagger|✅|✅|✅|❤️|
