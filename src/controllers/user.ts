@@ -3,6 +3,7 @@ import { Request, Response, Router } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/user';
 import IContoller from '../Types/IController';
+import authTokenMiddleware from '../middlewares/authToken';
 
 export default class UserController implements IContoller {
   public readonly path = '/api/users';
@@ -14,6 +15,7 @@ export default class UserController implements IContoller {
   }
 
   public initRoutes() {
+    this.router.use(this.path, authTokenMiddleware);
     this.router.get(this.path, expressAsyncHandler(UserController.getUsers));
     this.router.get(`${this.path}/:id`, expressAsyncHandler(UserController.getUser));
   }

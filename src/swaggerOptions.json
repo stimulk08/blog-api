@@ -36,6 +36,9 @@
           "Posts"
         ],
         "summary": "Get all posts",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -52,6 +55,9 @@
       "post": {
         "tags": [
           "Posts"
+        ],
+        "security": [
+          {"JwtAuth": []}
         ],
         "summary": "Create a new Post",
         "requestBody": {
@@ -99,6 +105,9 @@
           "Posts"
         ],
         "summary": "Get post by id",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -120,6 +129,9 @@
           "Posts"
         ],
         "summary": "Delete post by id",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "responses": {
           "204": {
             "description": "OK"
@@ -134,6 +146,9 @@
           "Posts"
         ],
         "summary": "Update post by id",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -237,8 +252,11 @@
       "get": {
         "tags": [
           "Users"
-        ],
+        ],        
         "summary": "Get all users",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -268,6 +286,9 @@
           "Users"
         ],
         "summary": "Get user by id",
+        "security": [
+          {"JwtAuth": []}
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -287,6 +308,11 @@
     }
   },
   "definitions": {
+    "JwtAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    },
     "PostResponse": {
       "type": "object",
       "properties": {

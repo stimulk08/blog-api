@@ -16,9 +16,10 @@ export default class PostController implements IContoller {
   }
 
   public initRoutes() {
-    this.router.get(this.path, authTokenMiddleware, expressAsyncHandler(PostController.getPosts));
+    this.router.use(this.path, authTokenMiddleware);
+    this.router.get(this.path, expressAsyncHandler(PostController.getPosts));
     this.router.get(`${this.path}/:id`, expressAsyncHandler(PostController.getPost));
-    this.router.post(this.path, authTokenMiddleware, expressAsyncHandler(PostController.createPost));
+    this.router.post(this.path, expressAsyncHandler(PostController.createPost));
     this.router.put(`${this.path}/:id`, expressAsyncHandler(PostController.updatePost));
     this.router.delete(`${this.path}/:id`, expressAsyncHandler(PostController.deletePost));
   }

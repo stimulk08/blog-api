@@ -21,8 +21,11 @@ export default class AuthController implements IContoller {
     this.router.post(`${this.path}/login`, expressAsyncHandler(AuthController.login));
   }
 
-  private static createCookie(tokenData: TokenData) {
-    return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.ttl}`;
+  private static setCookie(res: Response, tokenData: TokenData) {
+    res.cookie('access_token', tokenData.token, {
+      httpOnly: true,
+      maxAge: tokenData.ttl,
+    });
   }
 
   private static async registration(req: Request, res: Response) {
@@ -35,7 +38,7 @@ export default class AuthController implements IContoller {
     user.password = '';
 
     const tokenData = generateAccessToken({ username: user.username });
-    res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
+    AuthController.setCookie(res, tokenData);
     res.status(201).send(user);
   }
 
@@ -50,7 +53,7 @@ export default class AuthController implements IContoller {
 
     user.password = '';
     const tokenData = generateAccessToken({ username: user.username });
-    res.setHeader('Set-Cookie', [AuthController.createCookie(tokenData)]);
+    AuthController.setCookie(res, tokenData);
     res.status(200).send(user);
   }
 }

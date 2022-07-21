@@ -1,6 +1,6 @@
 interface TokenData {
     token: string;
-    ttl: string;
+    ttl: number;
 }
 
 export default TokenData;
