@@ -6,17 +6,3 @@
  * API: Express
  * БД: PostgreSQL
  * ORM: Sequelize
-
-## Tasks
-|  | Name | I knew how to do it before | Implemented | Working | I enjoyed it |
-|--|:----:|:--------------------------:|:-----------:|:-------:|:-----------------------:|
-|1|Project architecture|✅, but the structure has improved significantly|✅|✅|❤️|
-|2|Postgres|+-|✅|✅|❤️|
-|3|JWT|❌|✅|✅|❤️|
-|4|Login|+-|✅|+-|❤️|
-|5|Register|✅|✅|+-|❤️|
-|6|Web client|✅|❌(I didn 't have time)|❌|💔|
-|7|Heroku|✅|❌(I didn 't have time)|❌|💔|
-|8|Docker|✅|❌(I didn 't have time)|❌|💔|
-|9|Swagger|✅|✅|✅|❤️|
-|10|REST API|✅|✅|✅|❤️|
